@@ -1,198 +1,176 @@
-# 💳 Banking Transaction Analysis
+# 🏦 Banking Transaction Analysis
+- Exploratory Data Analysis (EDA) | Fraud Detection | User Spending Behaviour
 
-- This project is a **data analysis case study** on anonymized banking transactions using **Python, Pandas and Jupyter Notebook**.  
+- This project performs a detailed analysis of Banking Transactions using a realistic dataset containing 15,000+ records of payments, merchants, users, categories, transaction types, and fraud labels.
 
-- The goal is to explore how users interact with their bank accounts, identify **top transaction types**, and generate **insights & visualizations** that could help in understanding customer behaviour and usage patterns.
+- The goal of this project is to understand:
 
----
+- Spending behaviour of users
 
-## 📁 Project Structure
+- Merchant-wise and category-wise spending
 
-```text
+- Outlier & anomaly patterns
+
+- Fraud transaction patterns
+
+- Time-based transaction patterns
+
+- Which users & transactions show the highest fraud probability
+
+- The notebook includes EDA, visualizations, insights, and fraud-focused analysis.
+
+- 📁 Project Structure
+```
 Banking-Transaction-Analysis/
-├── Banking.csv                     # Raw banking transaction dataset
-├── BankingTransactionAnalysis.ipynb # Jupyter notebook with full analysis
-└── README.md                       # Project documentation
-```
-## 📊 Dataset Overview (Banking.csv)
-- The dataset contains row-level banking transactions.
-- Typical columns include (may vary slightly based on your version):
-
-  - UserID – Unique identifier for each customer
-
-  - TransactionType – Type of transaction (e.g., UPI, NEFT, IMPS, ATM, etc.)
-
-  - Amount – Transaction amount
-
-  - Date / TransactionDate – When the transaction occurred
-
-  - Other supporting fields depending on the bank export / sample
-
-- The dataset used here is for educational and analysis purposes only.
-- No real customer-identifiable information is exposed.
-
-## 🎯 Objectives
-- Load & clean raw banking transaction data
-
-- Perform exploratory data analysis (EDA) on:
-
-- Total and average transaction amounts
-
-- Distribution of transaction types
-
-- User-level behaviour and frequency
-
-- Identify the top transaction type per user
-
-- Create useful visualizations to communicate insights
-
-## 🔍 Key Analysis & Insights
-- Some of the analyses performed in BankingTransactionAnalysis.ipynb:
-
-- Overall transaction volume and total amount
-
-- Aggregation of data by:
-
-  - UserID
-
-  - TransactionType
-
-  - Identification of top transaction type per user using:
-
-  - groupby on UserID and TransactionType
-
-  - Aggregation of Amount
-
-  - Selecting the highest contributing transaction type per user
-
-- Creation of a pivot table and a heatmap to visualize:
-
-  - How strongly each user uses different transaction types
-
-  - Which transaction modes dominate across users
-
-- Example snippet used in the notebook (conceptually):
-
-  - python
-Copy code
-```
-TopTransaction = (
-    df.groupby(['UserID', 'TransactionType'])['Amount']
-      .sum()
-      .reset_index()
-      .sort_values(['UserID', 'Amount'], ascending=[True, False])
-)
-TopUsage = (
-    TopTransaction
-      .sort_values(['UserID', 'Amount'], ascending=[True, False])
-      .groupby('UserID')
-      .head(1)
-      .reset_index(drop=True)
-)
-
-pivot_usage = TopUsage.pivot(
-    index='UserID',
-    columns='TransactionType',
-    values='Amount'
-)
-```
-- This is then visualized as a heatmap to show the dominant transaction type per user.
-
-## 🛠️ Tech Stack
-### Language: Python 3.x
-
-### Environment: Jupyter Notebook
-
- ## - Libraries:
-
-- pandas – data manipulation
-
-- numpy – numerical operations
-
-- matplotlib / seaborn – visualizations
-
-# 🚀 Getting Started
-## 1️⃣ Clone the Repository
-bash
-Copy code
-```
-git clone https://github.com/sAdityas/Banking-Transaction-Analysis.git
-cd Banking-Transaction-Analysis
-```
-## 2️⃣ Create & Activate a Virtual Environment (Optional but Recommended)
-bash
-Copy code
-```
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# macOS / Linux
-source venv/bin/activate
+│
+├── data/
+│   └── Banking.csv                # Transaction dataset
+│
+├── notebooks/
+│   └── BankingTransactionAnalysis.ipynb   # Main EDA notebook
+│
+├── README.md                      # Project documentation
 ```
 
-## 3️⃣ Install Required Libraries
-bash
-Copy code
-```
-pip install pandas numpy matplotlib seaborn jupyter
-```
-## 4️⃣ Launch Jupyter Notebook
-bash
-Copy code
-```
-jupyter notebook
-```
-Then open:
+## 📊 Dataset Overview
 
-text
-Copy code
-```
-BankingTransactionAnalysis.ipynb
-```
-and run the cells step by step.
+- The dataset contains 15,000+ bank transactions with the following fields:
 
-## 📈 Visualizations
-- The notebook contains plots such as:
+  - Column	Description
+  - TransactionID	Unique ID of each transaction
+  - UserID	User who performed the transaction
+  - Date	Timestamp (YYYY-MM-DD HH:MM:SS)
+  - TransactionType	UPI / POS / ATM / Online / Card
+  - Category	Food, Travel, Bills, Groceries, Shopping, etc.
+  - Merchant	Amazon, Uber, Swiggy, PetrolPump, etc.
+  - Amount	Transaction value in ₹
+  - CardType	Debit or Credit
+  - IsFraud	1 = Fraud, 0 = Legitimate
 
-- Distribution of transaction amounts
+- Fraud patterns were generated using realistic logic:
 
-- Count/amount by TransactionType
+- Large online payments (> ₹12,000) have higher fraud probability
 
-- Heatmap of top transaction type per user
+- 2% background random fraud generation
 
-- Any additional charts you add for trends and insights
+## 🔍 Key Analysis Performed
+### ✅ 1. Data Cleaning
 
-- You can freely extend the notebook with:
+- Checked for null values
 
-- Time-series analysis (monthly/weekly trends)
+- Verified datatypes
 
-- User segmentation (high vs low value users)
+- Extracted Date & Time components
 
-- Anomaly/outlier detection (unusual transactions)
+- Converted date-time column for analysis
 
-## 🧩 Possible Extensions
-- If you want to take this project further, here are some ideas:
+## ✅ 2. Outlier Detection
 
-- Build a dashboard using:
+- Used boxplots to analyze outliers for:
 
-  - Streamlit / Dash / Power BI / Tableau
+- Categories vs Amount
 
-  - Add fraud detection rules (e.g., unusual transaction sizes or times)
+- Merchants vs Amount
 
-  - Create customer profiles based on transaction behaviour
+- Transaction Types vs Amount
 
-  - Integrate with a database (PostgreSQL/MySQL) for larger datasets
+## ✅ 3. Spending Behaviour
 
-## 🤝 Contributions
-This is a learning-oriented project.
-Feel free to:
+- Average spend by category
 
-Fork the repo
+- Highest spending merchants
 
-Improve the analysis or visualizations
+- User-wise spending patterns
 
-Open a pull request with enhancements or bug fixes
+- Transaction volume by type
 
-🧾 Disclaimer
-This project is intended purely for educational and analytical practice in data analysis and visualization.
-It should not be used as a real banking or financial decision system.
+## ✅ 4. Fraud Analysis
+
+- Total fraud count
+
+- Fraud transactions by merchant
+
+- Fraud vs non-fraud amount distribution
+
+- Time-of-day fraud analysis
+
+- User fraud patterns
+
+- Fraud heat map (if added later)
+
+## ✅ 5. Visualizations
+
+- Boxplots
+
+- Bar charts
+
+- Scatter plots
+
+- Countplots
+
+- Time-based charts
+
+## 📈 Insights & Findings (Summary)
+
+- These are some example insights (yours may vary based on notebook):
+
+- Fraud is highest in ONLINE transactions, especially transactions above ₹12,000.
+
+- Certain merchants (like Amazon, IRCTC etc.) show higher high-value transactions → increased fraud checks needed.
+
+- Late-night transactions (11PM – 3AM) have higher fraud percentage.
+
+- Most users spend heavily on Food, Shopping, and Travel.
+
+- Debit cards show lower fraud frequency compared to credit cards.
+
+- Some users repeatedly show suspicious patterns → good candidates for fraud flagging.
+
+- Add your actual insights here once finalized.
+
+## 🚀 How to Run the Project
+- Requirements
+
+- Install required libraries:
+
+  - pip install pandas matplotlib seaborn numpy
+
+  - Run the Notebook
+
+  - Clone the repository
+
+  ```
+  git clone https://github.com/sAdityas/Banking-Transaction-Analysis.git
+  ```
+
+  - Navigate to project folder
+  
+  ```
+  cd Banking-Transaction-Analysis
+  ```
+
+  - Launch Jupyter Notebook
+
+  ```
+  jupyter notebook
+  ```
+
+  - Open the notebook inside notebooks/ folder.
+
+## 🧠 Future Improvements (Roadmap)
+
+- Add correlation heatmap
+
+- Build fraud detection ML model (Logistic Regression / Random Forest)
+
+- Add Power BI dashboard
+
+- Add user segmentation (K-Means)
+
+- Add more detailed time-series analysis
+
+# 👤 Author
+
+## Aditya Sarkale
+### 📍 Pune, India
+### 🔗 GitHub: @sAdityas
